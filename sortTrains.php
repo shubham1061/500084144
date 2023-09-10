@@ -1,21 +1,23 @@
 <?php
+include_once("register.php");
+include_once("authorization.php")
 function getTrains() {
     global $accessToken;
 
     $headers = array(
-        "Authorization: Bearer $accessToken"
+         $accessToken
     );
 
     $response = getRequest('http://20.244.56.144/train/trains', $headers);
 
     if ($response !== false && $response['http_code'] == 200) {
-        $allTrains = json_decode($response['body'], true);
+        $totalTrains = json_decode($response['body'], true);
         $currentTime = time();
         // 12 hours in seconds
         $next12Hours = $currentTime + 12 * 3600; 
 
         // Filter trains departing in the next 12 hours (excluding the next 30 minutes)
-        $reqTrains = array_filter($allTrains, function ($train) use ($currentTime, $next12Hours) {
+        $reqTrains = array_filter($totalTrains, function ($train) use ($currentTime, $next12Hours) {
             $depTime = strtotime($train['departureTime']['Hours'] . ':' . $train['departureTime']['Minutes']);
             return $depTime >= $currentTime + 30 * 60 && $depTime <= $next12Hours;
         });
