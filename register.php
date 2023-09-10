@@ -13,7 +13,7 @@ function register() {
         "accessCode"=> "JnNPGs"
     );
 
-    $response = sendPostRequest('http://20.244.56.144/train/register', $data);
+    $response = PostRequest('http://20.244.56.144/train/register', $data);
 
     if ($response !== false && $response['http_code'] == 200) {
         return json_decode($response['body'], true);
